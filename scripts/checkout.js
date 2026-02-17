@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { cart, calculateCartQuantity } from "../data/cart.js";
+import { cart, calculateCartQuantity, removeFromCart } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
 
 checkoutProducts();
@@ -13,7 +13,7 @@ export function checkoutProducts() {
       products.find((product) => product.id === cartItem.productId);
 
     renderProductsHTML += /*html*/ `
-          <div class="cart-item-container">
+          <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
               <div class="delivery-date">
                 Delivery date: Wednesday, June 15
               </div>
@@ -36,7 +36,7 @@ export function checkoutProducts() {
                     <span class="update-quantity-link link-primary">
                       Update
                     </span>
-                    <span class="delete-quantity-link link-primary">
+                    <span class="delete-quantity-link link-primary js-delete-quantity-link" data-product-id="${matchingProduct.id}">
                       Delete
                     </span>
                   </div>
@@ -94,4 +94,15 @@ export function checkoutProducts() {
     document.querySelector('.js-return-to-home-link').innerHTML = 
       `${calculateCartQuantity()} items`;
   }
+
+  document.querySelectorAll('.js-delete-quantity-link')
+    .forEach((deleteLink) => {
+      deleteLink.addEventListener('click', () => {
+        const {productId} = deleteLink.dataset;
+        removeFromCart(productId);
+        showCheckoutItems();
+
+        document.querySelector(`.js-cart-item-container-${productId}`).remove();
+      });
+    });
 }
