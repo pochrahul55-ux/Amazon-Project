@@ -1,11 +1,11 @@
 import { products } from "../data/products.js";
-import { cart } from "../data/cart.js";
+import { cart, calculateCartQuantity } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
-console.log(cart);  // See what's in the cart
 
 checkoutProducts();
 
 export function checkoutProducts() {
+  showCheckoutItems();
   let renderProductsHTML = '';
 
   cart.forEach((cartItem) => {
@@ -89,4 +89,9 @@ export function checkoutProducts() {
       `
   });
   document.querySelector('.js-order-summary').innerHTML = renderProductsHTML;
+
+  function showCheckoutItems() {
+    document.querySelector('.js-return-to-home-link').innerHTML = 
+      `${calculateCartQuantity()} items`;
+  }
 }
