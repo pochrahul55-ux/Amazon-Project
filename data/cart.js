@@ -9,6 +9,10 @@ const cart = [
   }
 ]
 
+function saveStorage() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
 export function addToCart(productId, quantity) {
   const matchingProduct = cart.find(cartItem => cartItem.productId === productId);
 
@@ -20,7 +24,16 @@ export function addToCart(productId, quantity) {
       quantity
     });
   }
+   saveStorage();
 }
 
+export function calculateCartQuantity() {
+  let cartQuantity = 0;
 
+  cart.forEach((cartItem) => {
+     cartQuantity += cartItem.quantity;
+  });
+
+  return cartQuantity;
+}
 
