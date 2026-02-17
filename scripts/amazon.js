@@ -1,8 +1,6 @@
 import { formatCurrency } from "./utils/money.js";
 import { products } from "../data/products.js";
 
-console.log('hi')
-
 let renderProductsHTML = '';
 products.forEach((product) => {
   renderProductsHTML += `
@@ -45,12 +43,12 @@ products.forEach((product) => {
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-to-cart-${product.id}">
           <img src="images/icons/checkmark.png">
           Added
         </div>
 
-        <button class="add-to-cart-button button-primary">
+        <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-id="${product.id}">
           Add to Cart
         </button>
       </div>
@@ -58,3 +56,24 @@ products.forEach((product) => {
 });
 
 document.querySelector('.js-products-grid').innerHTML = renderProductsHTML;
+
+document.querySelectorAll('.js-add-to-cart-button')
+  .forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const {productId} = btn.dataset;
+        showAddedToCartMessage(productId);
+    });
+  });
+
+let timeOutId = {};
+function showAddedToCartMessage(productId) {
+  if (timeOutId[productId]) clearTimeout(timeOutId[productId]);
+
+  document.querySelector(`.js-added-to-cart-${productId}`)
+      .classList.add('added-to-cart-visible');
+
+  timeOutId[productId] = setTimeout(() => {
+    document.querySelector(`.js-added-to-cart-${productId}`)
+      .classList.remove('added-to-cart-visible');
+  }, 2000);
+}
