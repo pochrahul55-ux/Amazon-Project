@@ -4,6 +4,7 @@ import { addToCart, calculateCartQuantity } from "../data/cart.js";
 
 cartQuantity();
 
+function renderProducts() {
 let renderProductsHTML = '';
 products.forEach((product) => {
   renderProductsHTML += `
@@ -55,10 +56,11 @@ products.forEach((product) => {
           Add to Cart
         </button>
       </div>
-  `
-});
-
-document.querySelector('.js-products-grid').innerHTML = renderProductsHTML;
+    `
+  });
+  return renderProductsHTML;
+}
+document.querySelector('.js-products-grid').innerHTML = renderProducts();
 
 document.querySelectorAll('.js-add-to-cart-button')
   .forEach((btn) => {
