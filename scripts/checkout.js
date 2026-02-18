@@ -58,7 +58,7 @@ export function checkoutProducts() {
                 <div class="delivery-options-title">
                   Choose a delivery option:
                 </div>
-                ${showDeliveryOptions()}
+                ${showDeliveryOptions(cartItem)}
               </div>
             </div>
         </div>
@@ -135,7 +135,7 @@ export function checkoutProducts() {
     });
   });
 
-  function showDeliveryOptions() {
+  function showDeliveryOptions(cartItem) {
     let renderDeliveryOptionsHTML = '';
     deliveryOptions.forEach((deliveryOption) => {
       const today = dayJs();
@@ -146,10 +146,13 @@ export function checkoutProducts() {
         ? 'FREE Shipping' 
         : `$${formatCurrency(deliveryOption.priceCents)} - Shipping`;
 
+      const isChecked = deliveryOption.deliveryOptionId === cartItem.deliveryOptionsId;
+      
       renderDeliveryOptionsHTML += /*html*/ `
           <div class="delivery-option">
             <input type="radio" class="delivery-option-input"
-              name="delivery-option-2">
+              ${isChecked ? 'checked': ''}
+             name="delivery-option-${cartItem.productId}"">
             <div>
               <div class="delivery-option-date">
                 ${formatDate}
