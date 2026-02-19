@@ -38,6 +38,5 @@ export function calculateBusinessDays(today, daysToDeliver) {
       count++;
     }
   }
-
   return date;
 }

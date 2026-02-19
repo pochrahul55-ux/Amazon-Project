@@ -18,10 +18,9 @@ export function checkoutProducts() {
 
   cart.forEach((cartItem) => {
     const deliveryOption = getDeliveryOptionId(cartItem);
-
-    const today = dayJs();
-    const deliveryDays = today.add(deliveryOption.deliveryDays, 'day');
-    const formatDate = deliveryDays.format('dddd, MMMM, D');
+    
+    const date = calculateBusinessDays(dayJs(), deliveryOption.deliveryDays);
+    const formatDate = date.format('dddd, MMMM, D');
 
     const matchingProduct = getMatchingProduct(cartItem)
 
@@ -144,10 +143,7 @@ export function checkoutProducts() {
   function showDeliveryOptions(cartItem, matchingProduct) {
     let renderDeliveryOptionsHTML = '';
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayJs();
-
-      const daysToDeliver = deliveryOption.deliveryDays;
-      const date = calculateBusinessDays(today, daysToDeliver);
+      const date = calculateBusinessDays(dayJs(), deliveryOption.deliveryDays);
       const formatDate = date.format('dddd, MMMM, D');
 
       const deliveryCost = deliveryOption.priceCents === 0 
