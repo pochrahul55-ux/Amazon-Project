@@ -9,6 +9,7 @@ import {
 import { formatCurrency } from "./utils/money.js";
 import { deliveryOptions, getDeliveryOptionId, calculateBusinessDays } from "../data/deliveryOptions.js";
 import dayJs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
+import { orderSummary } from "./checkoutOrderSummary.js";
 
 export function checkoutProducts() {
   showCheckoutItems();
@@ -177,6 +178,7 @@ export function checkoutProducts() {
         const {productId, deliveryOptionId} = deliveryOption.dataset;
         updateCartDeliveryOption(productId, deliveryOptionId);
         checkoutProducts();
+        orderSummary();
       });
     })
 }
