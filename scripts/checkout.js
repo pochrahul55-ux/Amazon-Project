@@ -1,4 +1,4 @@
-import { products } from "../data/products.js";
+import { products, getMatchingProduct } from "../data/products.js";
 import { 
   cart, 
   calculateCartQuantity, 
@@ -7,7 +7,7 @@ import {
   updateCartDeliveryOption,
 } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
-import { deliveryOptions, deliveryOptionId } from "../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOptionId } from "../data/deliveryOptions.js";
 import dayJs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 
 checkoutProducts();
@@ -17,14 +17,13 @@ export function checkoutProducts() {
   let renderProductsHTML = '';
 
   cart.forEach((cartItem) => {
-    const deliveryOption = deliveryOptionId(cartItem);
+    const deliveryOption = getDeliveryOptionId(cartItem);
 
     const today = dayJs();
     const deliveryDays = today.add(deliveryOption.deliveryDays, 'day');
     const formatDate = deliveryDays.format('dddd, MMMM, D');
 
-    const matchingProduct =
-      products.find((product) => product.id === cartItem.productId);
+    const matchingProduct = getMatchingProduct(cartItem)
 
     renderProductsHTML += /*html*/ `
         <div class="cart-item-container js-cart-item-container"

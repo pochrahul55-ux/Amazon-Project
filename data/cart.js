@@ -47,8 +47,12 @@ export function calculateCartQuantity() {
   return cartQuantity;
 }
 
+function getCartItem(productId) {
+    return cart.find(cartItem => cartItem.productId === productId);
+}
+
 export function updateCartInArray(productId, quantity) {
-  const matchingProduct = cart.find(cartItem => cartItem.productId === productId);
+  const matchingProduct = getCartItem(productId);
 
   if (matchingProduct) {
     matchingProduct.quantity = quantity;
@@ -57,7 +61,7 @@ export function updateCartInArray(productId, quantity) {
 }
 
 export function updateCartDeliveryOption(productId, deliveryOptionId) {
-  const matchingProduct = cart.find(cartItem => cartItem.productId === productId);
+  const matchingProduct = getCartItem(productId);
 
   if (matchingProduct) {
     matchingProduct.deliveryOptionsId = deliveryOptionId;

@@ -18,7 +18,7 @@ export const deliveryOptions = [
   }
 ]
 
-export function deliveryOptionId(cartItem) {
+export function getDeliveryOptionId(cartItem) {
   const matchedDeliveryOption = 
     deliveryOptions.find(option => option.deliveryOptionId === cartItem.deliveryOptionsId);
   
