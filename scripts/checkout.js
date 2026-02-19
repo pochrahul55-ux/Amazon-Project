@@ -7,7 +7,7 @@ import {
   updateCartDeliveryOption,
 } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
-import { deliveryOptions, getDeliveryOptionId } from "../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOptionId, calculateBusinessDays } from "../data/deliveryOptions.js";
 import dayJs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 
 checkoutProducts();
@@ -145,8 +145,10 @@ export function checkoutProducts() {
     let renderDeliveryOptionsHTML = '';
     deliveryOptions.forEach((deliveryOption) => {
       const today = dayJs();
-      const deliveryDays = today.add(deliveryOption.deliveryDays, 'day');
-      const formatDate = deliveryDays.format('dddd, MMMM, D');
+
+      const daysToDeliver = deliveryOption.deliveryDays;
+      const date = calculateBusinessDays(today, daysToDeliver);
+      const formatDate = date.format('dddd, MMMM, D');
 
       const deliveryCost = deliveryOption.priceCents === 0 
         ? 'FREE Shipping' 

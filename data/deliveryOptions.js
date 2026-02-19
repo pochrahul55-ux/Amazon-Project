@@ -24,3 +24,20 @@ export function getDeliveryOptionId(cartItem) {
   
   return matchedDeliveryOption;
 }
+
+export function calculateBusinessDays(today, daysToDeliver) {
+  let date = today;
+  let count = 0;
+
+  while (count < daysToDeliver) {
+    date = date.add(1, 'day');
+
+    const day = date.day();
+
+    if (day !== 0 && day !== 6){
+      count++;
+    }
+  }
+
+  return date;
+}
