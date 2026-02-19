@@ -53,7 +53,15 @@ export function updateCartInArray(productId, quantity) {
   if (matchingProduct) {
     matchingProduct.quantity = quantity;
   }
+  saveStorage();
+}
 
+export function updateCartDeliveryOption(productId, deliveryOptionId) {
+  const matchingProduct = cart.find(cartItem => cartItem.productId === productId);
+
+  if (matchingProduct) {
+    matchingProduct.deliveryOptionsId = deliveryOptionId;
+  }
   saveStorage();
 }
 

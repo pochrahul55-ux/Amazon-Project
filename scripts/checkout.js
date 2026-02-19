@@ -3,10 +3,11 @@ import {
   cart, 
   calculateCartQuantity, 
   removeFromCart, 
-  updateCartInArray 
+  updateCartInArray,
+  updateCartDeliveryOption,
 } from "../data/cart.js";
 import { formatCurrency } from "./utils/money.js";
-import { deliveryOptions } from "../data/deliveryOptions.js";
+import { deliveryOptions, deliveryOptionId } from "../data/deliveryOptions.js";
 import dayJs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 
 checkoutProducts();
@@ -16,6 +17,12 @@ export function checkoutProducts() {
   let renderProductsHTML = '';
 
   cart.forEach((cartItem) => {
+    const deliveryOption = deliveryOptionId(cartItem);
+
+    const today = dayJs();
+    const deliveryDays = today.add(deliveryOption.deliveryDays, 'day');
+    const formatDate = deliveryDays.format('dddd, MMMM, D');
+
     const matchingProduct =
       products.find((product) => product.id === cartItem.productId);
 
@@ -23,7 +30,7 @@ export function checkoutProducts() {
         <div class="cart-item-container js-cart-item-container"
           data-product-id="${matchingProduct.id}">
             <div class="delivery-date">
-              Delivery date: Wednesday, June 15
+              Delivery date: ${formatDate}
             </div>
 
             <div class="cart-item-details-grid">
@@ -58,7 +65,7 @@ export function checkoutProducts() {
                 <div class="delivery-options-title">
                   Choose a delivery option:
                 </div>
-                ${showDeliveryOptions(cartItem)}
+                ${showDeliveryOptions(cartItem, matchingProduct)}
               </div>
             </div>
         </div>
@@ -135,7 +142,7 @@ export function checkoutProducts() {
     });
   });
 
-  function showDeliveryOptions(cartItem) {
+  function showDeliveryOptions(cartItem, matchingProduct) {
     let renderDeliveryOptionsHTML = '';
     deliveryOptions.forEach((deliveryOption) => {
       const today = dayJs();
@@ -147,12 +154,14 @@ export function checkoutProducts() {
         : `$${formatCurrency(deliveryOption.priceCents)} - Shipping`;
 
       const isChecked = deliveryOption.deliveryOptionId === cartItem.deliveryOptionsId;
-      
+
       renderDeliveryOptionsHTML += /*html*/ `
-          <div class="delivery-option">
-            <input type="radio" class="delivery-option-input"
+          <div class="delivery-option js-delivery-option"
+           data-product-id="${matchingProduct.id}"
+           data-delivery-option-id="${deliveryOption.deliveryOptionId}">
+            <input type="radio" class="delivery-option-input"         
               ${isChecked ? 'checked': ''}
-             name="delivery-option-${cartItem.productId}"">
+             name="delivery-option-${cartItem.productId}">
             <div>
               <div class="delivery-option-date">
                 ${formatDate}
@@ -164,7 +173,15 @@ export function checkoutProducts() {
           </div>
       `
     });
-
     return renderDeliveryOptionsHTML;
   }
+
+  document.querySelectorAll('.js-delivery-option')
+    .forEach((deliveryOption) => {
+      deliveryOption.addEventListener('click', () => {
+        const {productId, deliveryOptionId} = deliveryOption.dataset;
+        updateCartDeliveryOption(productId, deliveryOptionId);
+        checkoutProducts();
+      });
+    })
 }

@@ -1,3 +1,5 @@
+import { cart } from "./cart.js";
+
 export const deliveryOptions = [
   {
     deliveryOptionId: '1',
@@ -15,3 +17,10 @@ export const deliveryOptions = [
     priceCents: 999
   }
 ]
+
+export function deliveryOptionId(cartItem) {
+  const matchedDeliveryOption = 
+    deliveryOptions.find(option => option.deliveryOptionId === cartItem.deliveryOptionsId);
+  
+  return matchedDeliveryOption;
+}
