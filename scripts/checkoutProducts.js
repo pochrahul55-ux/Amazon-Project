@@ -70,6 +70,8 @@ export function checkoutProducts() {
   });
   document.querySelector('.js-order-summary').innerHTML = renderProductsHTML;
 
+  orderSummary();
+
   function showCheckoutItems() {
     document.querySelector('.js-return-to-home-link').innerHTML = 
       `${calculateCartQuantity()} items`;
@@ -126,6 +128,7 @@ export function checkoutProducts() {
     container.querySelector('.js-quantity-label').textContent = quantity;
 
     showCheckoutItems();
+    checkoutProducts();
   }
 
   document.querySelectorAll('.js-input-quantity')
@@ -178,7 +181,6 @@ export function checkoutProducts() {
         const {productId, deliveryOptionId} = deliveryOption.dataset;
         updateCartDeliveryOption(productId, deliveryOptionId);
         checkoutProducts();
-        orderSummary();
       });
     })
 }
