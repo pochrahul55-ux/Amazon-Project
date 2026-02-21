@@ -80,10 +80,13 @@ export function checkoutProducts() {
   document.querySelectorAll('.js-delete-quantity-link')
     .forEach((deleteLink) => {
       deleteLink.addEventListener('click', () => {
-        const {productId} = deleteLink.dataset;
-        removeFromCart(productId);
-        showCheckoutItems();
-        document.querySelector(`.js-cart-item-container[data-product-id="${productId}"]`).remove();
+        const confirmDelete = confirm('Are you sure you want to delete the product?');
+        if (confirmDelete) {
+          const {productId} = deleteLink.dataset;
+          removeFromCart(productId);
+          showCheckoutItems();
+          document.querySelector(`.js-cart-item-container[data-product-id="${productId}"]`).remove();
+        }
       });
     });
 
