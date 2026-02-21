@@ -28,7 +28,10 @@
     "jest-environment-jsdom": "^30.2.0"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+    "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js": "<rootDir>/node_modules/dayjs/dayjs.min.js"
+  }
   },
   "dependencies": {
     "dayjs": "^1.11.19"
