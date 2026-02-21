@@ -29,5 +29,8 @@
   },
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.19"
   }
 }
