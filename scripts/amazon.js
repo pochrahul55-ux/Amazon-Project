@@ -5,9 +5,9 @@ import { addToCart, calculateCartQuantity } from "../data/cart.js";
 cartQuantity();
 
 function renderProducts() {
-let renderProductsHTML = '';
-products.forEach((product) => {
-  renderProductsHTML += `
+  let renderProductsHTML = '';
+  products.forEach((product) => {
+    renderProductsHTML += `
       <div class="product-container">
         <div class="product-image-container">
           <img class="product-image"
@@ -20,14 +20,14 @@ products.forEach((product) => {
 
         <div class="product-rating-container">
           <img class="product-rating-stars"
-            src="images/ratings/rating-${product.rating.stars * 10}.png">
+            src="${product.getRatingStars()}">
           <div class="product-rating-count link-primary">
             ${product.rating.count}
           </div>
         </div>
 
         <div class="product-price">
-          $${formatCurrency(product.priceCents)}
+         ${product.getPriceCents()}
         </div>
 
         <div class="product-quantity-container">
@@ -44,6 +44,10 @@ products.forEach((product) => {
             <option value="10">10</option>
           </select>
         </div>
+
+        ${product.getClothingSize()}
+        ${product.getInstructions()}
+        ${product.getWarranty()}
 
         <div class="product-spacer"></div>
 
@@ -65,10 +69,10 @@ document.querySelector('.js-products-grid').innerHTML = renderProducts();
 document.querySelectorAll('.js-add-to-cart-button')
   .forEach((btn) => {
     btn.addEventListener('click', () => {
-        const {productId} = btn.dataset;
-        showAddedToCartMessage(productId);
-        selectProductQuantity(productId);
-        cartQuantity();
+      const { productId } = btn.dataset;
+      showAddedToCartMessage(productId);
+      selectProductQuantity(productId);
+      cartQuantity();
     });
   });
 
@@ -77,7 +81,7 @@ function showAddedToCartMessage(productId) {
   if (timeOutId[productId]) clearTimeout(timeOutId[productId]);
 
   document.querySelector(`.js-added-to-cart-${productId}`)
-      .classList.add('added-to-cart-visible');
+    .classList.add('added-to-cart-visible');
 
   timeOutId[productId] = setTimeout(() => {
     document.querySelector(`.js-added-to-cart-${productId}`)
@@ -88,7 +92,7 @@ function showAddedToCartMessage(productId) {
 function selectProductQuantity(productId) {
   const selectQuantity = document.querySelector(`.js-product-quantity-${productId}`)
   const quantity = Number(selectQuantity.value);
-  
+
   addToCart(productId, quantity);
 }
 

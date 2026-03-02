@@ -1,8 +1,68 @@
+import { formatCurrency } from "../scripts/utils/money.js";
+
 export function getMatchingProduct(cartItem) {
   const matchingProduct =
       products.find((product) => product.id === cartItem.productId);
 
   return matchingProduct;
+}
+
+export class Product {
+  constructor({id, image, name, rating, priceCents}) {
+    this.id = id;
+    this.image = image;
+    this.name = name;
+    this.rating = rating;
+    this.priceCents = priceCents;
+  }
+
+  getClothingSize() {
+    return '';
+  }
+
+  getRatingStars() {
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  getPriceCents() {
+    return `$${formatCurrency(this.priceCents)}`;
+  }
+
+   getInstructions() {
+    return '';
+   }
+
+   getWarranty() {
+    return '';
+   }
+}
+
+export class ClothingProduct extends Product {
+  constructor({id, image, name, rating, priceCents, sizeChartLink}) {
+    super({id, image, name, rating, priceCents});
+    this.sizeChartLink = sizeChartLink;
+  }
+
+  getClothingSize() {
+    return `<a href="${this.sizeChartLink}" target="_blank">Size Chart</a>`;
+  }
+}
+
+export class ApplianceProduct extends Product {
+
+  constructor({id, image, name, rating, priceCents, instructionsLink, warrantyLink}) {
+    super({id, image, name, rating, priceCents});
+    this.instructionsLink = instructionsLink;
+    this.warrantyLink = warrantyLink;
+  }
+
+  getInstructions() {
+    return `<a href="${this.instructionsLink}" target="_blank">Instructions</a>`;
+  }
+
+  getWarranty() {
+    return `<a href="${this.warrantyLink}" target="_blank">Warranty</a>`;
+  }
 }
 
 export const products = [
@@ -60,6 +120,9 @@ export const products = [
       stars: 5,
       count: 2197
     },
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
     priceCents: 1899,
     keywords: [
       "toaster",
@@ -245,6 +308,9 @@ export const products = [
       stars: 5,
       count: 846
     },
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
     priceCents: 3074,
     keywords: [
       "water boiler",
@@ -551,6 +617,9 @@ export const products = [
       count: 1211
     },
     priceCents: 2250,
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
     keywords: [
       "coffeemakers",
       "kitchen",
@@ -610,6 +679,9 @@ export const products = [
       stars: 4,
       count: 3
     },
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
     priceCents: 10747,
     keywords: [
       "food blenders",
@@ -664,4 +736,13 @@ export const products = [
       "mens"
     ]
   }
-];
+].map((productDetails) => {
+  if (productDetails.type === 'clothing') {
+    return new ClothingProduct(productDetails);
+  } else if (productDetails.type === 'appliance') {
+    return new ApplianceProduct(productDetails);
+  }
+
+  return new Product(productDetails);
+});
+
